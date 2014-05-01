@@ -16,6 +16,7 @@ Ext.BLANK_IMAGE_URL = 'http://cdnjs.cloudflare.com/ajax/libs/extjs/3.4.1-1/resou
  **/
 Ext.namespace("Heron.options.map");
 Ext.namespace("Heron.PDOK");
+Ext.namespace("Heron.OpenEarth");
 
 /** Use these in  services where the server has less resolutions than the Map, OL will "blowup" lower resolutions */
 Heron.options.serverResolutions = {
@@ -110,7 +111,8 @@ Heron.scratch.urls = {
     KADEMO_OWS: 'http://kademo.nl/gs2/ows?',
     KADEMO_GWC_TMS: 'http://kademo.nl/gwc/service/tms/',
     OPENBASISKAART_TMS: 'http://openbasiskaart.nl/mapcache/tms/',
-    RO_WMS: 'http://afnemers.ruimtelijkeplannen.nl/afnemers/services?'
+    RO_WMS: 'http://afnemers.ruimtelijkeplannen.nl/afnemers/services?',
+    OPENEARTH_WMS: 'http://opendap.deltares.nl/thredds/wms/'
 };
 
 Heron.PDOK.urls = {
@@ -152,6 +154,10 @@ Heron.PDOK.urls = {
     LFROUTES: Heron.scratch.urls.PDOK + '/lfroutes/wms?',
     RDINFO: Heron.scratch.urls.PDOK + '/rdinfo/wms?',
     STREEKPADEN: Heron.scratch.urls.PDOK + '/streekpaden/wms?'
+};
+
+Heron.OpenEarth.urls = {
+    PACE: Heron.scratch.urls.OPENEARTH_WMS + 'opendap/deltares/PACE/trim-dws_200m_v6_2009_01_31_2009_02_01.nc?'
 };
 
 Ext.namespace("Heron.options.wfs");
@@ -752,6 +758,19 @@ Heron.options.map.layers = [
             {isBaseLayer: false, singleTile: true, visibility: false, featureInfoFormat: "application/vnd.ogc.gml", alpha: true, opacity: 0.7}
 
     ),
+    
+    
+    /* ------------------------------
+         * Deltares THREDDS WMS
+         * Zie htp://openearth.eu
+     * ------------------------------ */
+    new OpenLayers.Layer.WMS(
+            "PACE",
+            Heron.OpenEarth.urls.PACE,
+            {layers: "waterlevel", format: "image/png", transparent: true},
+            {isBaseLayer: false, singleTile: true, visibility: false, featureInfoFormat: "application/vnd.ogc.gml", alpha: true, opacity: 0.7}
+
+    ),    
     Heron.options.worklayers.editor,
     Heron.options.worklayers.scratch
 ];
