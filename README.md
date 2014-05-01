@@ -1,4 +1,4 @@
 openlayersdemo
 ==============
 
-Example project for openlayers based viewers
+Example project for openlayers based viewers.
