@@ -768,7 +768,7 @@ Heron.options.map.layers = [
             "PACE",
             Heron.OpenEarth.urls.PACE + 'TIME=2009-01-31T06:59:59.999Z&COLORSCALERANGE=-1,1&',
             {layers: "waterlevel", format: "image/png", transparent: true},
-            {isBaseLayer: false, singleTile: true, visibility: false, featureInfoFormat: "application/vnd.ogc.gml", alpha: true, opacity: 0.7}
+            {isBaseLayer: false, singleTile: true, visibility: true, featureInfoFormat: "application/vnd.ogc.gml", alpha: true, opacity: 0.7}
 
     ),    
     Heron.options.worklayers.editor,
