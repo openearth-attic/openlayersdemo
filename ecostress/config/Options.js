@@ -799,16 +799,8 @@ Heron.options.layertree.tree = [
     ]
     },
     {
-        text: 'Kadaster', expanded: false, children: [
-
-        {
-            text: 'Kadastrale Kaart (zoom >8)', expanded: false, children: [
-            {nodeType: "gx_layer", layer: "Kadastrale Vlakken", text: "Percelen (WMS)" },
-            {nodeType: "gx_layer", layer: "Kadastrale Vlakken (tiled)", text: "Percelen (tiled)" },
-            {nodeType: "gx_layer", layer: "Kadastrale Gebouwen (tiled)", text: "Gebouwen (tiled)" },
-            {nodeType: "gx_layer", layer: "Kadastrale Kaart Alles (tiled)", text: "Percelen en Gebouwen (tiled)" }
-        ]
-        }
+        text: 'OpenEarth', expanded: true, children: [
+	    {nodeType: "gx_layer", layer: "PACE", text: "PACE from the maker (WMS)" }
     ]
     },
     {
