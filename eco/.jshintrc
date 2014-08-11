@@ -17,5 +17,12 @@
     "strict": true,
     "trailing": true,
     "smarttabs": true,
-    "jquery": true
+    "jquery": true,
+    "globals": {
+        "L": false,
+        "d3": false,
+        "_": false,
+        "OpenLayers": false
+    }
+
 }
