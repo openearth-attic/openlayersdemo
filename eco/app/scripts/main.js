@@ -3,8 +3,11 @@
 // OpenLayers.ProxyHost = 'proxy.cgi?url=';
 
 var map, client;
-
+var wpsUrl = 'http://wps.openearth.nl/wps';
+var offerings;
+var processes;
 function init() {
+
 
     map = new OpenLayers.Map('map', {
         allOverlays: true,
@@ -25,10 +28,56 @@ function init() {
 
     client = new OpenLayers.WPSClient({
         servers: {
-            openearth: 'http://wps.openearth.nl/wps'
+            openearth: wpsUrl
         }
     });
 
+    client.events.on("describeprocess", function(x){console.log("event", x);});
+    client.events.triggerEvent('describeprocess', {});
+    var capabilities;
+    OpenLayers.Request.GET({
+        url: wpsUrl,
+        params: {
+            "SERVICE": "WPS",
+            "REQUEST": "GetCapabilities",
+            "VERSION": "1.0.0"
+        },
+        success: function(response){
+            capabilities = new OpenLayers.Format.WPSCapabilities().read(
+                response.responseText
+            );
+            offerings = _.values(capabilities.processOfferings);
+            processes = _.object(_.map(offerings, function(x){
+                var offering = client.getProcess('openearth', x.identifier);
+                offering.describe();
+                return [x.identifier, offering];
+            }));
+
+            // populate the dropdown
+            var process = d3.select("#processes")
+                    .selectAll("p")
+                    .data(offerings)
+                    .enter()
+                    .append("div");
+            process
+                .append("h2")
+                .text(function(x) {return x.identifier});
+            process
+                .append("p")
+                .text(function(x){return x.abstract});
+            process
+                .append("p")
+                .selectAll('li')
+                .data(function(x) {return processes[x.identifier];})
+                .enter()
+                .append('li')
+                .text(function(x){return x});
+
+
+
+
+        }
+    });
     // // Create a process and configure it
     // intersect = client.getProcess('opengeo', 'JTS:intersection');
     // intersect.configure({
@@ -57,22 +106,22 @@ function init() {
     // Instead of creating a process and executing it, we could call execute on
     // the client directly if we are only dealing with a single process:
     /*
-    client.execute({
-        server: "opengeo",
-        process: "JTS:intersection",
-        // spatial input can be a feature or a geometry or an array of
-        // features or geometries
-        inputs: {
-            a: features,
-            b: geometry
-        },
-        success: function(outputs) {
-            // outputs.result is a feature or an array of features for spatial
-            // processes.
-            map.baseLayer.addFeatures(outputs.result);
-        }
-    });
-    */
+     client.execute({
+     server: "opengeo",
+     process: "JTS:intersection",
+     // spatial input can be a feature or a geometry or an array of
+     // features or geometries
+     inputs: {
+     a: features,
+     b: geometry
+     },
+     success: function(outputs) {
+     // outputs.result is a feature or an array of features for spatial
+     // processes.
+     map.baseLayer.addFeatures(outputs.result);
+     }
+     });
+     */
 
 }
 init();
